@@ -1,10 +1,23 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h1>안녕하세요</h1>
+    <table class="table">
+        <thead class="table-primary">
+            <tr>
+                <th scope="">#</th>
+                <th>title</th>
+                <th>link</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+            <td>{{article.id}}</td>
+            <td>{{article.title}}</td>
+            <td><a href="/article/{{article.id}}/">상세보기</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    {% for article in articles %}
-    <p>{{ article }}</p>
-    {% endfor %}
-    
 {% endblock %}
