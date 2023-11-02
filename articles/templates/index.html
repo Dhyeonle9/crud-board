@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <table class="table">
+    <table class="table mt-3">
         <thead class="table-primary">
             <tr>
                 <th scope="">#</th>
@@ -12,9 +12,11 @@
         <tbody>
             {% for article in articles %}
             <tr>
-            <td>{{article.id}}</td>
-            <td>{{article.title}}</td>
-            <td><a href="/article/{{article.id}}/">상세보기</a></td>
+            <td>{{ article.id }}</td>
+            <td>{{ article.title }}</td>
+            <td>
+                <a href="{% url 'articles:detail' id=article.id %}">detail</a>
+            </td>
             </tr>
             {% endfor %}
         </tbody>
