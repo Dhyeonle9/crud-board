@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Article
 
 def index(request):
@@ -16,3 +16,18 @@ def detail(request, id):
         'article': article,
     }
     return render(request, 'detail.html', context)
+
+def new(request):
+    return render(request, 'new.html')
+
+def create(request):
+    title = request.POST.get('title')
+    content = request.POST.get('content')
+
+    article = Article()
+    article.title = title
+    article.content = content
+    article.save()
+
+    # {% url 'articles:detail', id=article.id %}
+    return redirect('articles:detail', id=article.id)

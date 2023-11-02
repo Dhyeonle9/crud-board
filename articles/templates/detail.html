@@ -8,9 +8,9 @@
         <div class="card-body">
             {{ article.content }}
         </div>
-        <div class="card-footer">
+        <div class="card-footer d-flex justify-content-between">
             {{ article.created_at }}
-            <a href="{% url 'articles:index' %}">목록으로</a>
+            <a href="{% url 'articles:index' %}">to list</a>
         </div>
     </div>
 {% endblock %}
