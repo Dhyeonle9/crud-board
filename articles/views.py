@@ -31,3 +31,16 @@ def create(request):
 
     # {% url 'articles:detail', id=article.id %}
     return redirect('articles:detail', id=article.id)
+
+def delete(request, id):
+    article = Article.objects.get(id=id)
+    article.delete()
+    return redirect('articles:index')
+
+def edit(request, id):
+
+    pass
+
+def update(request, id):
+    
+    pass
