@@ -1,0 +1,9 @@
+{% extends 'base.html'%}
+
+{% block body %}
+    <form action="{% url 'articles:create' %}" class="mt-4" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" class="btn btn-primary">
+    </form>
+{% endblock %}

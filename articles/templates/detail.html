@@ -7,7 +7,7 @@
                 {{ article.title }}
             </div>
             <div>
-                <a href="{% url 'articles:edit' id=article.id %}" class="btn btn-secondary">edit</a>
+                <a href="{% url 'articles:update' id=article.id %}" class="btn btn-secondary">edit</a>
                 <a href="{% url 'articles:delete' id=article.id %}" class="btn btn-danger">delete</a>
             </div>
         </div>
@@ -18,5 +18,27 @@
             {{ article.created_at }}
             <a href="{% url 'articles:index' %}">to list</a>
         </div>
+    </div>
+    <hr>
+    <div>
+        <div class="container d-flex justify-content-between">
+            <span>댓글</span>
+            {% if article.comment_set.count > 5 %}
+            <a href="{% url 'articles:comments' article_id=article.id %}">댓글 더보기</a>
+        </div>
+        <hr>
+        <div class="container">
+        {% endif %}
+        {% for comment in comments %}
+            <p>{{ comment.comment }}</p>
+            <hr>
+        {% endfor %}
+        </div>
+        <hr>
+        <form action="{% url 'articles:comment_create' article_id=article.id %}" method='POST' class="form">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="등록" class="btn btn-secondary">
+        </form>
     </div>
 {% endblock %}

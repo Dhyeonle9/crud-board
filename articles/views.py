@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Article
+from .models import Article, Comment
+from .forms import ArticleForm, CommentForm
 
 def index(request):
     articles = Article.objects.all()
@@ -11,46 +12,62 @@ def index(request):
 
 def detail(request, id):
     article = Article.objects.get(id=id)
-   
+    comments = article.comment_set.all().order_by('-id')[:5]
+    form = CommentForm()
     context = {
         'article': article,
+        'comments': comments,
+        'form': form,
     }
     return render(request, 'detail.html', context)
 
-def new(request):
-    return render(request, 'new.html')
-
 def create(request):
-    title = request.POST.get('title')
-    content = request.POST.get('content')
-
-    article = Article()
-    article.title = title
-    article.content = content
-    article.save()
-
-    # {% url 'articles:detail', id=article.id %}
-    return redirect('articles:detail', id=article.id)
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save()
+            return redirect('articles:detail', id=article.id)
+    else:
+        form = ArticleForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'form.html', context)
 
 def delete(request, id):
     article = Article.objects.get(id=id)
     article.delete()
     return redirect('articles:index')
 
-def edit(request, id):
+def update(request, id):
     article = Article.objects.get(id=id)
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article)
+        article = form.save()
+        return redirect('articles:detail', id=article.id)
+    else:
+        form = ArticleForm(instance=article)
+    context = {
+        'form': form,
+    }
+    return render(request, 'form.html', context)
+
+def comments(request, article_id):
+    article = Article.objects.get(id=article_id)
     context = {
         'article': article
     }
-    return render(request, 'edit.html', context)
+    return render(request, 'comments.html', context)
 
-def update(request, id):
-    title = request.POST.get('title')
-    content = request.POST.get('content')
+def comment_create(request, article_id):
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.article_id = article_id
+        comment.save()
+        return redirect('articles:detail', id=article_id)
+  
+    
+        
 
-    article = Article.objects.get(id=id)
-    article.title = title
-    article.content = content
-    article.save()
 
-    return redirect('articles:detail', id=article.id)
